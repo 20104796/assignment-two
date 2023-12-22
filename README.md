@@ -1,62 +1,80 @@
-# TMDB Movie App
+# Assignment 2 - Web API.
 
-A ReactJS application for exploring movies with Material UI components and Firebase authentication.
-Youtube Videos for this work: https://youtu.be/X8KLEjhkqCw
-## Overview
+Name: Yuanzhe Yang
 
-This project is a web application that allows users to discover, explore, and interact with movie data from TMDB. It offers various features and functionalities for a seamless movie-watching experience.
+Video: https://youtu.be/APJOHH6HDfk
 
-### Features
+## Features.
 
-- Browse the latest, top-ranked, and popular films.
-- Get movie recommendations based on the selected genre.
-- Access actor information and explore their filmography.
-- Sort movies by ranking in ascending or descending order.
-- Use a search bar to filter movies by name.
-- Authenticate using Firebase (e.g., email: 111@gmail.com, password: 111111).
-- See actors and their roles through a user-friendly Material UI form in the selected movie.
-- Implement pagination for a cleaner display of movie lists.
++ Added additional API endpoints that utilize parameterized paths.
++ The frontend now exclusively utilizes APIs that are handled through the backend system.
++ The backend, Movies-API, now facilitates the authentication process.
++ Certain pages have been updated to necessitate authentication for data retrieval. (Introduction of secure routes.)
++ Employed Swagger for comprehensive API documentation.
+## Setup requirements.
 
-## Setup Requirements
+open one terminal  
+`cd movies-api`  
+`npm install`  
+`npm run dev`  
+open another terminal  
+`cd movies`  
+`npm install`  
+`npm start`
 
-Clone the repo and follow these setup steps to run the app locally.
-In the movie directory, you can run:
-### `npm install`
-Download relative packages
+## API Configuration
 
-### `npm start`
++ create a `.env` file in the movies-api folder as below:
+   ______________________
+  NODE_ENV=development  
+  PORT=8080   
+  HOST=localhost  
+  MONGO_DB=YourMongoURL  
+  SEED_DB=True  
+  SECRET=YourJWTSecret  
+  REACT_APP_TMDB_KEY=YourTMDBApiKey
+   ______________________
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## API Design
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+When this movies-api server is running, you can visit this api server's document by visiting http://localhost:8080/api-docs/#/
 
-## API Endpoints
+### [Actors](movies-api/api/actors/index.js)
++ `/api/actor/tmdb/movie/{movieId}/cast` | GET | Retrieves information about the actors who take part in a specific movie.
++ `/api/actor/tmdb/actor/{actorName}` | GET | Retrieves details by actor's name.
++ `/api/actor/tmdb/movie/{movieId}` | GET | Retrieves the actor's movie details for a specific movie ID.
 
-The app uses the following TMDB API endpoints:
+### [Genres](movies-api/api/genres/index.js)
++ `/api/genres/tmdb/genres` | GET | Retrieves all movie genres.
 
-- Details of movie that actor involved in  -- `/actors/:name/:movieId`  -- `https://api.themoviedb.org/3/movie/${movieId}`
-- Actor Information -- `/actors/:name` -- `https://api.themoviedb.org/3/search/person?query=${encodedActorName}`
-- Information about high ranked movies -- `/movies/top-Ranted` --`https://api.themoviedb.org/3/movie/top_rated`
-- Movie list that is playing in cinema now -- `/movies/now-Playing` --`https://api.themoviedb.org/3/movie/now_playing`
-## Routing
+### [Movies](movies-api/api/movies/index.js)
++ `/api/movies/tmdb/upcoming` | GET | Retrieves upcoming movies from TMDB.
++ `/api/movies/tmdb/top_rated` | GET | Retrieves top rated movies from TMDB.
++ `/api/movies/tmdb/now_playing` | GET | Retrieves movies that are currently playing in theaters from TMDB.
++ `/api/movies/tmdb/discover` | GET | Discovers movies based on different criteria from TMDB.
++ `/api/movies/tmdb/popular` | GET | Retrieves popular movies from TMDB.
++ `/api/movies/tmdb/movie/{id}` | GET | Retrieves detailed information of a specific movie by ID.
++ `/api/movies/tmdb/movie/{id}/images` | GET | Retrieves images related to a specific movie by ID.
 
-The app features the following routes:
+### [Users](movies-api/api/users/index.js)
++ `/api/users/` | POST | Registers or authenticates a user. The body should include username and password.
++ `/api/users/favourites/add/{userName}` | POST | Adds a movie to the user's favourites list.
++ `/api/users/favourites/get/{userName}` | GET | Retrieves the user's favourite movies.
++ `/api/users/favourites/remove/{userName}` | POST | Removes a movie from the user's favourites list.
++ `/api/users/{username}` | PUT | Updates a single user's information, such as password.
 
-- `/movies/:id/recommendation` - Shows recommended movies based on the selected genre.
-- `/movies/now-playing` - Displays currently playing films.
-- `/movies/top-rated` - Shows top-ranked films.
-- `/movies/popular` - Displays popular films.
+## Security and Authentication
 
-Public and protected aspects of the app are clearly defined for user convenience.
++ Authentication is utilized to manage user sessions like the favorite page.
++ Favourite Movies Page (/movies/favorites/)
 
-## Independent Learning
+## Integrating with React App
 
-During the development of this project, I independently researched and implemented various technologies and techniques not covered in the lectures or labs. Here are some of the highlights:
++ All front-end APIs are now using movies-api
++ When a user attempts to access a protected page, they are redirected to the login page.
 
-- **Firebase Authentication**: Used Firebase for third-party authentication.
-- **Material UI Components**: Integrated Material UI components to enhance the user interface.
-- **Pagination**: Implemented a pagination system for better organization of movie lists.
-
-For more details and source code references, please refer to the project's source code and the following online resources (articles/blogs).
+## Independent learning (if relevant)
+Swagger learning --
+    https://swagger.io/
+    https://www.youtube.com/watch?v=5aryMKiBEKY 
+    https://www.youtube.com/watch?v=dhMlXoTD3mQ&t=888s 

@@ -12,6 +12,36 @@ router.get('/', async (req, res) => {
     res.status(200).json(users);
 });
 
+/**
+ * @swagger
+ * /api/users/:
+ *   post:
+ *     tags:
+ *       - "Users"
+ *     summary: Register or authenticate a user
+ *     description: Handles user registration or authentication based on query parameter.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - username
+ *               - password
+ *             properties:
+ *               username:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: User successfully registered or authenticated.
+ *       400:
+ *         description: Username and password are required.
+ *       500:
+ *         description: Internal server error.
+ */
 router.post('/', asyncHandler(async (req, res) => {
     try {
         if (!req.body.username || !req.body.password) {
@@ -29,7 +59,42 @@ router.post('/', asyncHandler(async (req, res) => {
     }
 }));
 
-
+/**
+ * @swagger
+ * /api/users/favourites/add/{userName}:
+ *   post:
+ *     tags:
+ *       - "Users"
+ *     summary: Add a movie to user's favourites
+ *     description: Add a movie to the favourites list of a specified user.
+ *     parameters:
+ *       - in: path
+ *         name: userName
+ *         required: true
+ *         description: Username of the user.
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - id
+ *             properties:
+ *               id:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Movie added to favourites successfully.
+ *       401:
+ *         description: User not authenticated.
+ *       404:
+ *         description: Movie not found.
+ *       500:
+ *         description: Internal server error.
+ */
 router.post('/favourites/add/:userName', asyncHandler(async (req, res) => {
     const userName = req.params.userName; // 从URL路径中获取用户ID
     const   movieId   = req.body.id;
@@ -63,7 +128,29 @@ router.post('/favourites/add/:userName', asyncHandler(async (req, res) => {
 }));
 
 
-//獲取
+/**
+ * @swagger
+ * /api/users/favourites/get/{userName}:
+ *   get:
+ *     tags:
+ *       - "Users"
+ *     summary: Retrieve user's favourite movies
+ *     description: Get a list of favourite movies for a specified user.
+ *     parameters:
+ *       - in: path
+ *         name: userName
+ *         required: true
+ *         description: Username of the user.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved the list of favourites.
+ *       401:
+ *         description: User not authenticated.
+ *       500:
+ *         description: Internal server error.
+ */
 router.get('/favourites/get/:userName', asyncHandler(async (req, res) => {
     const userName = req.params.userName; // 从URL路径中获取用户ID
     const user = await User.findByUserName(userName); // 等待查询完成
@@ -74,7 +161,40 @@ router.get('/favourites/get/:userName', asyncHandler(async (req, res) => {
     res.status(200).json(user.favourites);
 }));
 
-//移除
+/**
+ * @swagger
+ * /api/users/favourites/remove/{userName}:
+ *   post:
+ *     tags:
+ *       - "Users"
+ *     summary: Remove a movie from user's favourites
+ *     description: Remove a specific movie from the favourites list of a user.
+ *     parameters:
+ *       - in: path
+ *         name: userName
+ *         required: true
+ *         description: Username of the user.
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - id
+ *             properties:
+ *               id:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Movie removed from favourites successfully.
+ *       401:
+ *         description: User not authenticated.
+ *       500:
+ *         description: Internal server error.
+ */
 router.post('/favourites/remove/:userName', asyncHandler(async (req, res) => {
 
     const userName = req.params.userName; // 从URL路径中获取用户ID
@@ -99,7 +219,42 @@ router.post('/favourites/remove/:userName', asyncHandler(async (req, res) => {
 }));
 
 
-// Update password
+/**
+ * @swagger
+ * /api/users/{username}:
+ *   put:
+ *     tags:
+ *       - "Users"
+ *     summary: Update user's password
+ *     description: Change the password for a specified user.
+ *     parameters:
+ *       - in: path
+ *         name: username
+ *         required: true
+ *         description: Username of the user.
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - newPassword
+ *             properties:
+ *               newPassword:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Password successfully updated.
+ *       400:
+ *         description: New password is required or does not meet complexity requirements.
+ *       404:
+ *         description: User not found.
+ *       500:
+ *         description: Internal server error.
+ */
 router.put('/:username', asyncHandler(async (req, res) => {
     const { username } = req.params;
     const { newPassword } = req.body;
